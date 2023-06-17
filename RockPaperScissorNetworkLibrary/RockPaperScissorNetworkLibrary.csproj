@@ -57,6 +57,7 @@
     <Compile Include="DTOs\ServerResponse.cs" />
     <Compile Include="ServerErrorMessage.cs" />
     <Compile Include="StatTracker.cs" />
+    <Compile Include="Threading\GroupStopper.cs" />
     <Compile Include="Threading\Worker.cs" />
   </ItemGroup>
   <ItemGroup>
