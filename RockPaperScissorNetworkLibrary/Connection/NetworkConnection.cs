@@ -37,6 +37,7 @@ namespace RockPaperScissorNetworkLibrary
             this.tcpClient = tcpClient;
             _serverSide = true;
             _connected = true;
+            InitializeObjects();
         }
         /// <summary>
         /// waits for something to read in the network stream, return anything thats found.
@@ -96,10 +97,17 @@ namespace RockPaperScissorNetworkLibrary
             if (_serverSide) throw new Exception("Server Connections cant start connections. can only recive connection requests.");
             Disconnect();
             tcpClient = new TcpClient(ip, port);
+            InitializeObjects();
+            _connected = true;
+        }
+        /// <summary>
+        /// Initializes the Network stream, stream reader, and writer.
+        /// </summary>
+        private void InitializeObjects()
+        {
             stream = tcpClient.GetStream();
             reader = new BinaryReader(stream);
             writer = new BinaryWriter(stream);
-            _connected = true;
         }
         /// <summary>
         /// Disconnects from destination
@@ -111,13 +119,16 @@ namespace RockPaperScissorNetworkLibrary
             stream?.Close();
             reader?.Close();
             writer?.Close();
+            if (_serverSide) Dispose();
         }
 
         //this is a test line
-
+        /// <summary>
+        /// Disposes of the current instance
+        /// </summary>
         public void Dispose()
         {
-            Disconnect();
+            if(_connected) Disconnect();
             tcpClient?.Dispose();
             stream?.Dispose();
             reader?.Dispose();
