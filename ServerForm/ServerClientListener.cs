@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Net.Sockets;
 using System.Net;
+using RockPaperScissorNetworkLibrary;
 
 namespace ServerForm
 {
@@ -14,26 +16,39 @@ namespace ServerForm
         private string ip;
         private int port;
 
-        
+        private ClientThreadManager _threadManager;
+
         public ServerClientListener(string ip, int port)
         {
             this.ip = ip;
             this.port = port;
+            _threadManager = new ClientThreadManager();
         }
 
-        public void StartFindingClients()
+        public void StartServer()
         {
-            _listener = new TcpListener(IPAddress.Parse(ip),port);
+            if(_listener == null) _listener = new TcpListener(IPAddress.Parse(ip), port);
             _listener.Start();
+            StartListening();
+        }
+        public void StopListener()
+        {
+            _keepListening = false;
+            _listener.Stop();
+        }
 
-            while(true)
+        private bool _keepListening = true;
+        private async void StartListening()
+        {
+            _keepListening = true;
+            while(_keepListening)
             {
-
+                ClientWorker client = new ClientWorker(_listener.AcceptTcpClient());
+                Thread thread = new Thread(client.Run);
+                _threadManager.Add(client);
+                thread.Start();
             }
         }
     }
-    public class ClientThreadManage
-    {
-        public List<Worker>
-    }
+    
 }

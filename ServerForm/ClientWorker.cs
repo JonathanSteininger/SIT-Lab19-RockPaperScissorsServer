@@ -1,20 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using RockPaperScissorNetworkLibrary;
 
-namespace RockPaperScissorNetworkLibrary
+namespace ServerForm
 {
     public class ClientWorker : Worker
     {
-        public override void Update()
+        private NetworkConnection _conn;
+
+        private Thread _currentThread;
+
+        public ClientWorker(TcpClient client) : base(null, 50)
         {
-            throw new NotImplementedException();
+            _conn = new NetworkConnection(client);
         }
+
         public override void Start()
         {
-            throw new NotImplementedException();
+            _currentThread = Thread.CurrentThread;
+        }
+
+        public override void Update()
+        {
+
+        }
+
+
+
+        public void Join()
+        {
+            Stop();
+            _currentThread.Join();
         }
 
     }
