@@ -16,24 +16,33 @@ namespace ServerForm
         private Thread _currentThread;
 
         private Player _player;
-
+        /// <summary>
+        /// ClinetWorker Constructor.
+        /// </summary>
+        /// <param name="client">The active connection to the client</param>
         public ClientWorker(TcpClient client) : base(null, 50)
         {
             _conn = new NetworkConnection(client);
             _player = new Player("Guest");
         }
-
+        /// <summary>
+        /// Runs when the thread starts running.
+        /// </summary>
         public override void Start()
         {
             _currentThread = Thread.CurrentThread;
         }
-
+        /// <summary>
+        /// The update method that runs every loop on its thread.
+        /// will run every time this instance recieves an object from the client's network stream
+        /// </summary>
         public override void Update()
         {
             object RecivedObject = _conn.ReadAuto();
             try
             {
-                if (RecivedObject == null) return;
+                if (RecivedObject == null) throw new Exception("recived obejct was null");
+
                 else if (RecivedObject is GameCommand) ResponseGameCommand((GameCommand)RecivedObject);
                 else if (RecivedObject is GameRequestData) ResponseGameRequestData((GameRequestData)RecivedObject);
                 else if (RecivedObject is GameSendData) ResponseGameSendData((GameSendData)RecivedObject);
@@ -47,13 +56,19 @@ namespace ServerForm
         }
 
         //server Responses to object recived
-
+        /// <summary>
+        /// Response to a ServerResponse object being sent by the client
+        /// </summary>
+        /// <param name="recivedObject">The recived object from the client</param>
         private void ResponseServerResponse(ServerResponse recivedObject)
         {
             if (recivedObject.ResponseType == ResponseType.ErrorMessage) return;
             throw new Exception("this Server cant recive Server responses");
         }
-
+        /// <summary>
+        /// Response to a GameSendData object being sent by the client
+        /// </summary>
+        /// <param name="recivedObject">The recived object from the client</param>
         private void ResponseGameSendData(GameSendData recivedObject)
         {
             switch (recivedObject.DataType)
@@ -69,7 +84,10 @@ namespace ServerForm
                     break;
             }
         }
-
+        /// <summary>
+        /// Response to a GameRequestData object being sent by the client
+        /// </summary>
+        /// <param name="recivedObject">The recived object from the client</param>
         private void ResponseGameRequestData(GameRequestData recivedObject)
         {
             switch (recivedObject.RequestType)
@@ -80,7 +98,10 @@ namespace ServerForm
                     break;
             }
         }
-
+        /// <summary>
+        /// Response to a GameCommand object being sent by the client
+        /// </summary>
+        /// <param name="recivedObject">The recived object from the client</param>
         private void ResponseGameCommand(GameCommand recivedObject)
         {
             switch (recivedObject.CommandType)
@@ -104,7 +125,8 @@ namespace ServerForm
         public void Join()
         {
             Stop();
-            _currentThread?.Join();
+            if (_currentThread == null || _currentThread.ThreadState != ThreadState.Running) return;
+            _currentThread.Join();
         }
 
     }

@@ -16,6 +16,8 @@ namespace ServerForm
         private string ip;
         private int port;
 
+        private bool _keepListening = true;
+
         private ClientThreadManager _threadManager;
 
         public ServerClientListener(string ip, int port)
@@ -24,20 +26,27 @@ namespace ServerForm
             this.port = port;
             _threadManager = new ClientThreadManager();
         }
-
+        /// <summary>
+        /// Starts the server and begins to search for clients.
+        /// </summary>
         public void StartServer()
         {
             if(_listener == null) _listener = new TcpListener(IPAddress.Parse(ip), port);
             _listener.Start();
             StartListening();
         }
+        /// <summary>
+        /// Stops the looping listener, but will continue to complete its loop
+        /// </summary>
         public void StopListener()
         {
             _keepListening = false;
             _listener.Stop();
         }
-
-        private bool _keepListening = true;
+        /// <summary>
+        /// Runs internally asyncronasly in the background. will check for clients.
+        /// when one is found, will start a new thread, add the connecdtion to the client worker. and add the worker to the threadmanager
+        /// </summary>
         private async void StartListening()
         {
             _keepListening = true;
