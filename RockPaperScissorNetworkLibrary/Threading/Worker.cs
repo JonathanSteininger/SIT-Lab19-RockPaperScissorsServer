@@ -9,13 +9,18 @@ namespace RockPaperScissorNetworkLibrary
 {
     public abstract class Worker
     {
-        public int TickMS {  get; set; }
-
-        private ManualResetEvent _stopper = new ManualResetEvent(true);
+        //common
+        public int TickMS { get; set; }
 
         public bool Completed = false;
 
+
+        //Stoppers
+        private ManualResetEvent _stopper = new ManualResetEvent(true);
         public GroupStopper GroupStopper { get; set; }
+
+
+        //Constructors
         public Worker(GroupStopper groupStopper)
         {
             GroupStopper = groupStopper;
@@ -24,6 +29,8 @@ namespace RockPaperScissorNetworkLibrary
         {
             GroupStopper = null;
         }
+
+
         public abstract void Update();
         public abstract void Start();
 
@@ -35,7 +42,7 @@ namespace RockPaperScissorNetworkLibrary
                 GroupStopper?.WaitOne();
                 _stopper.WaitOne();
                 Update();
-                if(TickMS > 0)Thread.Sleep(TickMS);
+                if(TickMS > 0) Thread.Sleep(TickMS);
             }
         }
 
@@ -52,23 +59,5 @@ namespace RockPaperScissorNetworkLibrary
             Completed = true;
             _stopper.Set();
         }
-    }
-
-    public class GroupStopper
-    {
-        private ManualResetEvent _stopper;
-        public GroupStopper()
-        {
-            _stopper = new ManualResetEvent(true);
-        }
-        public virtual void Pause()
-        {
-            _stopper.Reset();
-        }
-        public virtual void Resume()
-        {
-            _stopper.Set();
-        }
-        public void WaitOne() => _stopper.WaitOne();
     }
 }
