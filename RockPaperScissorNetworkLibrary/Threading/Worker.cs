@@ -21,14 +21,12 @@ namespace RockPaperScissorNetworkLibrary
 
 
         //Constructors
-        public Worker(GroupStopper groupStopper)
+        public Worker(GroupStopper groupStopper, int TickMS)
         {
             GroupStopper = groupStopper;
+            this.TickMS = TickMS;
         }
-        public Worker()
-        {
-            GroupStopper = null;
-        }
+        public Worker() : this(null, 1000) { }
 
 
         public abstract void Update();
