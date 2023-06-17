@@ -30,6 +30,7 @@ namespace RockPaperScissorNetworkLibrary
         private StatTracker _stats;
         public StatTracker Stats { get { return _stats; } }
 
+        public Player(string UserName) : this(UserName, UserName) { }
         public Player(string displayName, string userName) : this(displayName, userName, false) { }
         public Player(string displayName, string userName, bool IsBot)
 
