@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -9,7 +10,7 @@ using RockPaperScissorNetworkLibrary;
 
 namespace ServerForm
 {
-    public class ClientWorker : Worker
+    public class ClientWorker : Worker, IDisposable
     {
         private NetworkConnection _conn;
 
@@ -129,5 +130,13 @@ namespace ServerForm
             _currentThread.Join();
         }
 
+        public void Dispose()
+        {
+            Stop();
+            _conn.Dispose();
+            _player = null;
+            GroupStopper = null;
+            _currentThread = null;
+        }
     }
 }

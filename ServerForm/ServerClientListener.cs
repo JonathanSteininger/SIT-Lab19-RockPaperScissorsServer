@@ -18,13 +18,13 @@ namespace ServerForm
 
         private bool _keepListening = true;
 
-        private ClientThreadManager _threadManager;
+        private ClientThreadManager _clientWorkerManager;
 
         public ServerClientListener(string ip, int port)
         {
             this.ip = ip;
             this.port = port;
-            _threadManager = new ClientThreadManager();
+            _clientWorkerManager = new ClientThreadManager();
         }
         /// <summary>
         /// Starts the server and begins to search for clients.
@@ -54,7 +54,7 @@ namespace ServerForm
             {
                 ClientWorker client = new ClientWorker(_listener.AcceptTcpClient());
                 Thread thread = new Thread(client.Run);
-                _threadManager.Add(client);
+                _clientWorkerManager.Add(client);
                 thread.Start();
             }
         }
