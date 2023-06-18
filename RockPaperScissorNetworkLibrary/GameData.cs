@@ -19,9 +19,6 @@ namespace RockPaperScissorNetworkLibrary
 
         public List<string> OutPutHistory { get; set; }
 
-        public RoundChoice? Player1Move { get; set; }
-        public RoundChoice? Player2Move { get; set; }
-
         public GameData(Player mainPlayer, Player opponentPlayer, bool isSinglePlayer, List<string> History)
         {
             OutPutHistory = History;
@@ -31,8 +28,6 @@ namespace RockPaperScissorNetworkLibrary
             //bools
             IsSinglePlayer = isSinglePlayer;
             WaitingForPlayer = !isSinglePlayer;
-            Player1Move = null;
-            Player2Move = null;
         }
         public GameData(Player mainPlayer, bool IsSinglePlayer, List<string> History) : this(mainPlayer, null, IsSinglePlayer, History) { }
 
