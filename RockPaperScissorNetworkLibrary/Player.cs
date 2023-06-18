@@ -21,7 +21,7 @@ namespace RockPaperScissorNetworkLibrary
 
         private bool _isBot;
 
-        public string DisplayName { get { return _displayName;  } set { _displayName = value; } }
+        public string DisplayName { get { return _displayName; } set { _displayName = value; } }
         public string UserName { get { return _userName; } set { _userName = value; } }
         public DateTime JoinDate { get { return _joinDate; } }
         public DateTime LastOnline { get { return _lastOnline; } set { _lastOnline = value; } }
@@ -37,7 +37,7 @@ namespace RockPaperScissorNetworkLibrary
         {
             _displayName = displayName;
             _userName = userName;
-            _identifier = IsBot ? "Bot".GetHashCode() :_userName.GetHashCode();
+            _identifier = IsBot ? "Bot".GetHashCode() : _userName.GetHashCode();
 
             _isBot = IsBot;
 
@@ -53,6 +53,9 @@ namespace RockPaperScissorNetworkLibrary
         }
 
         public override string ToString() => $"{_displayName} ({_userName}) | {_stats}";
+
+        public static bool operator ==(Player a, Player b) => a.GetHashCode() == b.GetHashCode();
+        public static bool operator !=(Player a, Player b) => a.GetHashCode() != b.GetHashCode();
 
     }
 }
