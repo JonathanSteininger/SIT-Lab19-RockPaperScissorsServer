@@ -21,7 +21,7 @@ namespace RockPaperScissorNetworkLibrary
 
         private bool _isBot;
 
-        public RoundChoice GameMove { get; set; }
+        public RoundChoice? GameMove { get; set; }
 
         public string DisplayName { get { return _displayName; } set { _displayName = value; } }
         public string UserName { get { return _userName; } set { _userName = value; } }
