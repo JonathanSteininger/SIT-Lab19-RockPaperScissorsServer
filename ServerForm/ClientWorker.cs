@@ -17,6 +17,9 @@ namespace ServerForm
         private Thread _currentThread;
 
         private Player _player;
+        public GameManager GameManager { get; set; }
+
+
         /// <summary>
         /// ClinetWorker Constructor.
         /// </summary>
@@ -78,6 +81,7 @@ namespace ServerForm
                     _player = (Player)recivedObject.Data;
                     break;
                 case DataSentType.GameMessage:
+                    GameManager.AddMessage(_player, recivedObject.Data as string);
                     break;
                 case DataSentType.GameMove:
                     break;
@@ -85,6 +89,8 @@ namespace ServerForm
                     break;
             }
         }
+
+
         /// <summary>
         /// Response to a GameRequestData object being sent by the client
         /// </summary>
