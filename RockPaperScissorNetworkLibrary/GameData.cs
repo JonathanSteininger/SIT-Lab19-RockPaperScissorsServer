@@ -17,9 +17,9 @@ namespace RockPaperScissorNetworkLibrary
 
         public bool WaitingForPlayer { get; set; }
 
-        public string[] OutPutHistory { get; set; }
+        public List<string> OutPutHistory { get; set; }
 
-        public GameData(Player mainPlayer, Player opponentPlayer, bool isSinglePlayer, string[] History)
+        public GameData(Player mainPlayer, Player opponentPlayer, bool isSinglePlayer, List<string> History)
         {
             OutPutHistory = History;
             //players
@@ -29,9 +29,7 @@ namespace RockPaperScissorNetworkLibrary
             IsSinglePlayer = isSinglePlayer;
             WaitingForPlayer = !isSinglePlayer;
         }
-        public GameData(Player mainPlayer, bool IsSinglePlayer, string[] History) : this(mainPlayer, null, IsSinglePlayer, History) { }
-
-
+        public GameData(Player mainPlayer, bool IsSinglePlayer, List<string> History) : this(mainPlayer, null, IsSinglePlayer, History) { }
 
         public override string ToString()
         {

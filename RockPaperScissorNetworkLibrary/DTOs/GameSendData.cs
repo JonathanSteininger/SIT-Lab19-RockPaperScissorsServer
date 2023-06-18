@@ -14,7 +14,7 @@ namespace RockPaperScissorNetworkLibrary
 
         public GameSendData(DataSentType dataSentType, object data) {
             DataType = dataSentType;
-            Data = data;
+            Data = data; 
         }
         public GameSendData(DataSentType dataSentType, string Message) : this(dataSentType, (object)Message) { }
         public GameSendData(DataSentType dataSentType, GameData GameData) : this(dataSentType, (object)GameData) { }
