@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotActions.cs" />
     <Compile Include="ClientThreadManager.cs" />
     <Compile Include="ClientWorker.cs" />
     <Compile Include="Form1.cs">

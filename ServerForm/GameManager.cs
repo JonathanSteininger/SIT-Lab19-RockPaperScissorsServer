@@ -11,14 +11,53 @@ namespace ServerForm
         private GameData _gameData;
         public GameData Game { get { return _gameData; } }
 
-        public GameManager(Player Creator, bool isSinglePlayer)
+        private ClientWorker _player1Worker;
+        private ClientWorker _player2Worker;
+
+        public GameManager(ClientWorker Creator, bool isSinglePlayer)
         {
-            _gameData = new GameData(Creator, isSinglePlayer, new List<string>());
+            _gameData = new GameData(Creator.Player, isSinglePlayer, new List<string>());
         }
-        public void AddSecondPlayer(Player player2)
+        public void AddSecondClient(ClientWorker worker)
         {
-            _gameData.Opponent = player2;
+            _player2Worker = worker;
+            _gameData.Opponent = _player2Worker.Player;
             _gameData.WaitingForPlayer = false;
+            _usingBot = false;
+        }
+        public void CheckResults()
+        {
+            if (_gameData.IsSinglePlayer) SinglePlayerCheckResult();
+            else MultiplayerCheckResult();
+        }
+
+        private void MultiplayerCheckResult()
+        {
+            if (_player1Worker == null || _player2Worker == null) throw new Exception("One of the workers were null");
+            _player1Worker.CheckResult();
+            _player2Worker?.CheckResult();
+            _player1Worker.Player.GameMove = null;
+            _player2Worker.Player.GameMove = null;
+        }
+
+        private void SinglePlayerCheckResult()
+        {
+            BotMove();
+            _player1Worker.CheckResult();
+            _player1Worker.Player.GameMove = null;
+            _gameData.Opponent.GameMove = null;
+        }
+
+        public void AddBot()
+        {
+            _gameData.Opponent = new Player("Bot");
+            _gameData.WaitingForPlayer = false;
+            _usingBot = true;
+        }
+        private bool _usingBot = false;
+        public void BotMove()
+        {
+            _gameData.Opponent.GameMove = BotActions.GetRandomChoice();
         }
         public void AddMessage(Player FromPlayer, string Message)
         {
@@ -34,5 +73,10 @@ namespace ServerForm
             return new ServerResponse(ResponseType.GameInfo, _gameData);
         }
 
+        internal Player FindOpponent(Player player)
+        {
+            if (_gameData.Player == player) return _gameData.Opponent;
+            else return _gameData.Player;
+        }
     }
 }

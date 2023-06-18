@@ -17,6 +17,8 @@ namespace ServerForm
         private Thread _currentThread;
 
         private Player _player;
+
+        public Player Player { get { return _player; } }
         public GameManager GameManager { get; set; }
 
 
@@ -119,6 +121,31 @@ namespace ServerForm
                     break;
             }
         }
+
+        public void CheckResult()
+        {
+            GameResult result;
+            Player p2 = GameManager.FindOpponent(_player);
+            if (_player.GameMove == p2.GameMove) result = GameResult.Draw;
+            else result = WinOrLose((RoundChoice)p2.GameMove);
+            //send object
+            _conn.Send(new ServerResponse(ResponseType.RoundResult, result));
+        }
+
+        private GameResult WinOrLose(RoundChoice choice)
+        {
+            switch(choice)
+            {
+                case RoundChoice.Rock:
+                    return _player.GameMove == RoundChoice.Paper ? GameResult.Win : GameResult.Lose;
+                case RoundChoice.Paper:
+                    return _player.GameMove == RoundChoice.Scissors ? GameResult.Win : GameResult.Lose;
+                case RoundChoice.Scissors:
+                    return _player.GameMove == RoundChoice.Rock ? GameResult.Win : GameResult.Lose;
+                default: throw new Exception("What? this should not run at all ever. I dont know how you managed to throw this exception. uhh... RoundChoice was not Rock, Paper, or Scissors");
+            }
+        }
+
 
         //other methods
 
