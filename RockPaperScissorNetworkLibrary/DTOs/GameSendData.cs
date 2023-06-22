@@ -17,7 +17,18 @@ namespace RockPaperScissorNetworkLibrary
             Data = data; 
         }
         public GameSendData(DataSentType dataSentType, string Message) : this(dataSentType, (object)Message) { }
-        public GameSendData(DataSentType dataSentType, GameData GameData) : this(dataSentType, (object)GameData) { }
+        public GameSendData(DataSentType dataSentType, SentGameData GameData) : this(dataSentType, (object)GameData) { }
         public GameSendData(DataSentType dataSentType, Player PlayerInfo) : this(dataSentType, (object)PlayerInfo) { }
+    }
+
+    public struct SentGameData
+    {
+        private bool _singlePlayer;
+        public bool IsSinglePlayer => _singlePlayer;
+
+        public SentGameData(bool isSinglePlayer)
+        {
+            _singlePlayer = isSinglePlayer;
+        }
     }
 }
