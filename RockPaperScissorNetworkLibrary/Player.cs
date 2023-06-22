@@ -56,8 +56,24 @@ namespace RockPaperScissorNetworkLibrary
 
         public override string ToString() => $"{_displayName} ({_userName}) | {_stats}";
 
-        public static bool operator ==(Player a, Player b) => a.GetHashCode() == b.GetHashCode();
-        public static bool operator !=(Player a, Player b) => a.GetHashCode() != b.GetHashCode();
-
+        public static bool operator ==(Player a, Player b)
+        {
+            if (a is null && b is null) return true;
+            if (a is null) return false;
+            return a.Equals(b);
+        }
+        public static bool operator !=(Player a, Player b)
+        {
+            if (a is null && b is null) return false;
+            if (a is null) return true;
+            return !a.Equals(b);
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is null) return false;
+            if (!(obj is Player)) return false;
+            Player other = (Player)obj;
+            return GetHashCode() == other.GetHashCode();
+        }
     }
 }

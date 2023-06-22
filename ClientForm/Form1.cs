@@ -16,6 +16,12 @@ namespace ClientForm
         public Form1()
         {
             InitializeComponent();
+            FormClosed += Form1_FormClosed;
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (_conn.Connected) _conn.Send(new GameCommand(RockPaperScissorNetworkLibrary.CommandType.QuitServer));
         }
 
         private NetworkConnection _conn;

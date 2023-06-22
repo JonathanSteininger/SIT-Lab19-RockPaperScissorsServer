@@ -23,8 +23,8 @@ namespace RockPaperScissorNetworkLibrary
 
         private List<HashPlayerResult> _playerHistory;
 
-        public float WinRate => Wins / TotalGames;
-        public float GamesPerPlayerAvg => TotalGames / PlayersPlayedCount;
+        public float WinRate => Wins / ((TotalGames <= 0) ? 1 : TotalGames);
+        public float GamesPerPlayerAvg => TotalGames / ((PlayersPlayedCount <= 0) ? 1 : PlayersPlayedCount);
 
 
         public int BotsPlayed => _playerHistory.CountPlayer(Player.BOT_HASH);

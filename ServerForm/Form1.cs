@@ -15,21 +15,30 @@ namespace ServerForm
         public Form1()
         {
             InitializeComponent();
+            FormClosed += Form1_FormClosed;
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            MainServer?.StopListener();
         }
 
         static ServerClientListener MainServer;
         private void Form1_Load(object sender, EventArgs e)
         {
-            MainServer = new ServerClientListener("172.0.0.1", 2046);
-            ListViewClients.Columns.AddRange(new ColumnHeader[]
-            {
-                new ColumnHeader(Name = "Name"),
-                new ColumnHeader(Name = "UserName"),
-                new ColumnHeader(Name = "JoinDate"),
-                new ColumnHeader(Name = "Game Status"),
-                new ColumnHeader(Name = "Opponent Name"),
-                new ColumnHeader(Name = "Opponent UserName"),
-            });
+            MainServer = new ServerClientListener("127.0.0.1", 2046);
+            MainServer.StartServer();
+            ListViewClients.View = View.Details;
+            ListViewClients.Columns.Add("Name");
+            ListViewClients.Columns.Add("UserName");
+            ListViewClients.Columns.Add("Join Date");
+            ListViewClients.Columns.Add("Game Status");
+            ListViewClients.Columns.Add("Opponent Name");
+            ListViewClients.Columns.Add("Opponent UserName");
+
+            int width = 120;
+            foreach (ColumnHeader header in ListViewClients.Columns) header.Width = width;
+            ListViewClients.Size = new Size(width * ListViewClients.Columns.Count + 20, ListViewClients.Height);
             UpdateListView();
         }
         /*
@@ -46,9 +55,9 @@ namespace ServerForm
 
         private async void UpdateListView()
         {
-            while(ListViewClients != null)
+            while (ListViewClients != null )
             {
-                UpdateListViewData();
+                if(MainServer != null && MainServer.IsRunning) UpdateListViewData();
                 await Task.Delay(100);
             }
 

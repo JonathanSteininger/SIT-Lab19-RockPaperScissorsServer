@@ -46,9 +46,10 @@ namespace ServerForm
         /// </summary>
         public override void Update()
         {
-            object RecivedObject = _conn.ReadAuto();
+
             try
             {
+                object RecivedObject = _conn.ReadAuto();
                 if (RecivedObject == null) throw new Exception("recived obejct was null");
 
                 else if (RecivedObject is GameCommand) ResponseGameCommand((GameCommand)RecivedObject);
@@ -59,7 +60,17 @@ namespace ServerForm
                 throw new Exception("Sent Object unknown");
             }catch (Exception ex)
             {
-                _conn.Send(new ServerResponse(new ServerErrorMessage("Error with sent object.", ex)));
+                if (_conn == null)
+                {
+                    Stop();
+                    return;
+                }
+                if (!_conn.Connected)
+                {
+                    Stop();
+                    return;
+                }
+                _conn.Send(new ServerResponse(ResponseType.ErrorMessage, new ServerErrorMessage("Error with sent object.", ex)));
             }
         }
 
@@ -86,6 +97,7 @@ namespace ServerForm
             {
                 case DataSentType.PlayerInfo:
                     _player = (Player)recivedObject.Data;
+                    GameManager?.UpdatePlayers();
                     break;
                 case DataSentType.GameMessage:
                     GameManager.AddMessage(_player, recivedObject.Data as string);

@@ -23,7 +23,12 @@ namespace RockPaperScissorNetworkLibrary
         private bool _serverSide = false;
 
         private bool _connected;
-        public bool Connected { get { return _connected; } }
+        public bool Connected { get {
+
+                if (tcpClient == null) return false;
+                return _connected && tcpClient.Connected; 
+            
+            } }
 
         public NetworkConnection(string ip, int port)
         {

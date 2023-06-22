@@ -18,6 +18,30 @@ namespace ServerForm
         {
             _gameData = new GameData(Creator.Player, isSinglePlayer, new List<string>());
         }
+
+        public void UpdatePlayers()
+        {
+            UpdatePlayer1();
+            UpdatePlayer2();
+
+            _gameData.Player = _player1Worker.Player;
+            _gameData.Opponent = _player2Worker.Player;
+        }
+
+        private void UpdatePlayer2()
+        {
+            if (_player2Worker == null) return;
+            if (_player2Worker.Player == null) return;
+            _gameData.Opponent = _player2Worker.Player;
+        }
+
+        private void UpdatePlayer1()
+        {
+            if (_player1Worker == null) return;
+            if (_player1Worker.Player == null) return;
+            _gameData.Player = _player1Worker.Player;
+        }
+
         public void AddSecondClient(ClientWorker worker)
         {
             _player2Worker = worker;
@@ -75,6 +99,7 @@ namespace ServerForm
 
         internal Player FindOpponent(Player player)
         {
+            if (_gameData.Player == null) return null;
             if (_gameData.Player == player) return _gameData.Opponent;
             else return _gameData.Player;
         }

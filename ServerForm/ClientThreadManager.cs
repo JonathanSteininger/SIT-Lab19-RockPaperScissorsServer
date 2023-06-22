@@ -81,15 +81,25 @@ namespace ServerForm
             List<string[]> rows = new List<string[]>();
             foreach(ClientWorker w in Workers)
             {
-                Player opponent = w.GameManager.FindOpponent(w.Player);
-                rows.Add(new string[] {
+                Player opponent = w.GameManager?.FindOpponent(w.Player);
+                string[] row = new string[] {
                     w.Player.DisplayName,
                     w.Player.UserName,
                     w.Player.JoinDate.ToShortDateString(),
-                    w.GameManager.Game.WaitingForPlayer ? "Waiting":"Playing",
-                    opponent.DisplayName ?? "none",
-                    opponent.UserName ?? "none"
-                }) ;
+                    "Not In Game",
+                    "none",
+                    "none"
+                };
+                if(opponent != null)
+                {
+                    row[4] = opponent.DisplayName;
+                    row[5] = opponent.UserName;
+                }
+                if(w.GameManager != null)
+                {
+                    row[3] = w.GameManager.Game.WaitingForPlayer ? "Waiting" : "Playing";
+                }
+                rows.Add(row);
             }
             return rows;
         }

@@ -16,7 +16,7 @@ namespace RockPaperScissorNetworkLibrary
         public static object DeserializeAuto(string objJson)
         {
             JObject obj = JObject.Parse(objJson);
-            string Type = (string)obj["type"];
+            string Type = (string)obj["Type"];
             if (string.IsNullOrEmpty(Type)) throw new Exception("null Or empty Type from deserialized object");
 
             switch (Type)

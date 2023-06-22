@@ -25,7 +25,10 @@ namespace ServerForm
             this.ip = ip;
             this.port = port;
             _clientWorkerManager = new ClientThreadManager();
+            _keepListening = false;
         }
+
+        public bool IsRunning => _keepListening;
 
         public List<string[]> GetClientsListViewData() => _clientWorkerManager.GetClientListData();
 
@@ -53,12 +56,21 @@ namespace ServerForm
         private async void StartListening()
         {
             _keepListening = true;
+            int _failCounter = 0;
             while(_keepListening)
             {
-                ClientWorker client = new ClientWorker(_listener.AcceptTcpClient(), _clientWorkerManager);
-                Thread thread = new Thread(client.Run);
-                _clientWorkerManager.Add(client);
-                thread.Start();
+                try
+                {
+                    ClientWorker client = new ClientWorker(await _listener.AcceptTcpClientAsync(), _clientWorkerManager);
+                    Thread thread = new Thread(client.Run);
+                    _clientWorkerManager.Add(client);
+                    thread.Start();
+                    _failCounter = 0;
+                }catch (Exception ex) {
+                    _failCounter++;
+                    await Task.Delay(400);
+                    if (_failCounter >= 3) _keepListening = false;
+                }
             }
         }
     }
