@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockPaperScissorNetworkLibr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerForm", "ServerForm\ServerForm.csproj", "{041EC2C6-9E64-48D0-BA7C-CF3F6A28DAEF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientForm", "ClientForm\ClientForm.csproj", "{4869252D-EA49-41D1-B18B-9C6E92C5B6F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{041EC2C6-9E64-48D0-BA7C-CF3F6A28DAEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{041EC2C6-9E64-48D0-BA7C-CF3F6A28DAEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{041EC2C6-9E64-48D0-BA7C-CF3F6A28DAEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4869252D-EA49-41D1-B18B-9C6E92C5B6F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4869252D-EA49-41D1-B18B-9C6E92C5B6F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4869252D-EA49-41D1-B18B-9C6E92C5B6F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4869252D-EA49-41D1-B18B-9C6E92C5B6F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
