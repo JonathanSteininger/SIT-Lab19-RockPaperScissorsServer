@@ -18,6 +18,7 @@ namespace ServerForm
 
         private Player _player;
 
+        private ClientThreadManager _parentManager;
         public Player Player { get { return _player; } }
         public GameManager GameManager { get; set; }
 
@@ -26,10 +27,11 @@ namespace ServerForm
         /// ClinetWorker Constructor.
         /// </summary>
         /// <param name="client">The active connection to the client</param>
-        public ClientWorker(TcpClient client) : base(null, 50)
+        public ClientWorker(TcpClient client, ClientThreadManager parentManager) : base(null, 50)
         {
             _conn = new NetworkConnection(client);
             _player = new Player("Guest");
+            _parentManager = parentManager;
         }
         /// <summary>
         /// Runs when the thread starts running.
@@ -68,7 +70,10 @@ namespace ServerForm
         /// <param name="recivedObject">The recived object from the client</param>
         private void ResponseServerResponse(ServerResponse recivedObject)
         {
-            if (recivedObject.ResponseType == ResponseType.ErrorMessage) return;
+            if (recivedObject.ResponseType == ResponseType.ErrorMessage)
+            {
+                return;
+            }
             throw new Exception("this Server cant recive Server responses");
         }
         /// <summary>
@@ -86,8 +91,11 @@ namespace ServerForm
                     GameManager.AddMessage(_player, recivedObject.Data as string);
                     break;
                 case DataSentType.GameMove:
+                    _player.GameMove = recivedObject.Data as RoundChoice?;
+                    GameManager.CheckResults();
                     break;
                 case DataSentType.CreateGame:
+                    GameManager = new GameManager(this, ((SentGameData)recivedObject.Data).IsSinglePlayer);
                     break;
             }
         }
@@ -102,6 +110,7 @@ namespace ServerForm
             switch (recivedObject.RequestType)
             {
                 case RequestType.GetGameInfo:
+                    _conn.Send(new ServerResponse(ResponseType.GameInfo, GameManager.Game));
                     break;
                 case RequestType.GetAllGames:
                     break;

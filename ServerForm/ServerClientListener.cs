@@ -52,7 +52,7 @@ namespace ServerForm
             _keepListening = true;
             while(_keepListening)
             {
-                ClientWorker client = new ClientWorker(_listener.AcceptTcpClient());
+                ClientWorker client = new ClientWorker(_listener.AcceptTcpClient(), _clientWorkerManager);
                 Thread thread = new Thread(client.Run);
                 _clientWorkerManager.Add(client);
                 thread.Start();

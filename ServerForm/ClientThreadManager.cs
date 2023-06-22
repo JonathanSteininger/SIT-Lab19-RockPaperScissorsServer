@@ -60,6 +60,21 @@ namespace ServerForm
                 if (match(Workers[i])) return i;
             return -1;
         }
+
+        public List<ClientWorker> GetClients()
+        {
+            return Workers;
+        }
+        public List<GameData> GetAllGames()
+        {
+            List<GameData> games = new List<GameData>();
+            foreach(ClientWorker worker in Workers)
+            {
+                if (!games.Contains(worker.GameManager.Game)) 
+                    games.Add(worker.GameManager.Game);
+            }
+            return games;
+        }
         /// <summary>
         /// Pauses all workers stored in this instance
         /// </summary>
