@@ -18,7 +18,7 @@ namespace ServerForm
 
         private bool _keepListening = true;
 
-        private ClientThreadManager _clientWorkerManager;
+        public ClientThreadManager _clientWorkerManager;
 
         public ServerClientListener(string ip, int port)
         {
@@ -26,6 +26,9 @@ namespace ServerForm
             this.port = port;
             _clientWorkerManager = new ClientThreadManager();
         }
+
+        public List<string[]> GetClientsListViewData() => _clientWorkerManager.GetClientListData();
+
         /// <summary>
         /// Starts the server and begins to search for clients.
         /// </summary>

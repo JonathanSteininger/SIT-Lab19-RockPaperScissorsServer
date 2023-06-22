@@ -75,6 +75,24 @@ namespace ServerForm
             }
             return games;
         }
+
+        public List<string[]> GetClientListData()
+        {
+            List<string[]> rows = new List<string[]>();
+            foreach(ClientWorker w in Workers)
+            {
+                Player opponent = w.GameManager.FindOpponent(w.Player);
+                rows.Add(new string[] {
+                    w.Player.DisplayName,
+                    w.Player.UserName,
+                    w.Player.JoinDate.ToShortDateString(),
+                    w.GameManager.Game.WaitingForPlayer ? "Waiting":"Playing",
+                    opponent.DisplayName ?? "none",
+                    opponent.UserName ?? "none"
+                }) ;
+            }
+            return rows;
+        }
         /// <summary>
         /// Pauses all workers stored in this instance
         /// </summary>
